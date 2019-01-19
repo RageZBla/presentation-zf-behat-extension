@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+<!--
+
+- joke about slide in Japanese
+- Self Intro
+- What is behat
+- I want to test my zf app
+- Does ZF supports PSR-7?
+- Let's use PHP builtin server
+- But
+- Simple WebServerContext
+- Fix everything the behold the zf-behat-extension
+- Configuration
+- Overriding services
+- Provide services to contexts
+- custom bootstraping
+- thank you
+
+-->
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>ZF and Behat integration (LT)</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<style>
+			.reveal section img.logo {
+				float: left;
+				width: 40%;
+				border: none;
+				box-shadow: none;
+			}
+			.reveal section img.big-logo {
+				width: 100%;
+				border: none;
+				box-shadow: none;
+			}
+			.reveal section left {
+				float: left;
+			}
+			.reveal section green {
+				color: green;
+			}
+			.reveal section .left {
+				text-align: left;
+				margin-left: 100px;
+			}
+			.reveal section .box {
+				height: 100%;
+			}
+			.reveal section .down {
+				/*position: relative;
+				height: 100%;
+				 */
+				display: -webkit-box;
+				-webkit-box-align: end;
+				display: -moz-box;
+				-moz-box-align: end;
+				display: box;
+				box-align: end;
+			}
+			.reveal section .down div.wrap {
+				/*
+				position: absolute;
+				bottom: 0px;
+				*/
+			}
+			.reveal section red {
+				color: red;
+			}
+			.reveal section pre code {
+				background: #3f3f3f;
+				color: #dcdcdc;
+			}
+			.reveal section code {
+				color: #c0341d;
+				background-color: #fbe5e1;
+				border-radius: 4px;
+			}
+		</style>
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- emojione
+		<script src="https://cdn.jsdelivr.net/npm/emojione@4.0.0/lib/js/emojione.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojione@4.0.0/extras/css/emojione.min.css"/>
+	-->
+	  <!-- twitter emoji -->
+		<link rel="stylesheet" href="http://ellekasai.github.io/twemoji-awesome/twemoji-awesome.css">
+		<!-- fontawesome -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/brands.css" integrity="sha384-1KLgFVb/gHrlDGLFPgMbeedi6tQBLcWvyNUN+YKXbD7ZFbjX6BLpMDf0PJ32XJfX" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-jLuaxTTBR42U2qJ/pm4JRouHkEDHkVqH0T1nyQXn1mZ7Snycpf6Rl25VBNthU4z0" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h2>ZFとBehatが協力して</h2>
+					<img class=logo style="margin-right: 50px; margin-left: 50px;" src="img/behat-logo.svg">
+					<img class=logo src="https://cdn.freebiesupply.com/logos/large/2x/zend-framework-logo-svg-vector.svg">
+				</section>
+				<section>
+					<!-- The previous slide is the only one written in Japanese -->
+					<h1>ごめんなさい</h1>
+					<p>1枚目のスライドのみ、日本語で書いてあります。</p>
+					<center><i class="twa twa-5x twa-scream"></i></center>
+				</section>
+				<section>
+					<h1>Introduction</h1>
+					<div class="box">
+						<p class="left" style="margin-bottom: 150px;">
+							<i class="twa twa-man"></i> Olivier Lechevalier <i class="twa" style="background-image: url(http://twemoji.maxcdn.com/svg/1f1eb-1f1f7.svg);"></i><br/>
+							<i class="twa twa-office"></i> <a href="http://www.springernature.com">Springer Nature</a><br/>
+							<i class="twa twa-loudspeaker"></i> Lead Web Developer
+						</p>
+						<div class="down left">
+							<div class="wrap">
+								<div>
+									<i class="fab fa-github"></i> <a href="https://github.com/RageZBla">RageZBla</a>
+								</div>
+								<div>
+									<i class="fab fa-gitlab"></i> <a href="https://gitlab.com/ragez">ragez</a>
+								</div>
+								<div>
+									<i class="fab fa-twitter"></i> <a href="https://twitter.com/ragezbla">ragezbla</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h1>Behat?</h1>
+					<pre><code>Feature: Search
+  In order to see a word definition
+  As a website user
+  I need to be able to search for a word
+
+  Scenario: Searching for a page that does exist
+    Given I am on "/wiki/Main_Page"
+    When I fill in "search" with "Behavior Driven Development"
+    And I press "searchButton"
+    Then I should see "agile software development"
+
+  Scenario: Searching for a page that does NOT exist
+    Given I am on "/wiki/Main_Page"
+    When I fill in "search" with "Glory Driven Development"
+    And I press "searchButton"
+    Then I should see "Search results"
+					</code></pre>
+				</section>
+				<section>
+					<h2>Testing ZF app using behat </h2>
+					<center><i class="twa twa-grin twa-5x"></i></center>
+				</section>
+				<section>
+					<h2>Does ZF support PSR-7?</h2>
+					<center><i class="twa twa-5x twa-scream"></i></center>
+				</section>
+				<section>
+					<h2>Let's use the PHP builtin webserver</h2>
+					<center><i class="twa twa-5x twa-clap"></i></center>
+				</section>
+				<section>
+					<h1>But</h1>
+					<ul>
+						<li>How do I make it work in CI?</li>
+						<li>It might crash</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Can't be helped</h2>
+					<pre><code>&lt;?php
+
+namespace behat\NPG\CPS\ASTAR\Context;
+
+use Symfony\Component\Process\Process;
+
+/**
+ * Start and stops the php builtin server
+ */
+trait WebServerProcessTrait
+{
+    /**
+     * @var Process
+     */
+    public static $webServer;
+
+    /**
+     * @BeforeSuite
+     */
+    public static function startWebServer()
+    {
+        self::$webServer = new Process('exec /usr/local/bin/php -S 0.0.0.0:80 -t public public/index.php');
+        self::$webServer->disableOutput();
+        self::$webServer->start();
+    }
+
+    /**
+     * @AfterSuite
+     */
+    public static function stopWebServer()
+    {
+        if (self::$webServer->isRunning()) {
+            self::$webServer->signal(SIGKILL);
+        }
+    }
+}
+					</code></pre>
+				</section>
+				<section>
+					<h2>Behold the ZF Behat extension</h2>
+					<center><i class="twa twa-5x twa-sparkles"></i></center>
+				</section>
+                <section>
+					<h2>Getting started</h2>
+                    <pre><code>$ composer require --dev springernature/behat-zf-extension</code></pre>
+                    <pre><code># behat.yml
+		...
+		default:
+			# ...
+			extensions:
+				SpringerNature\Behat\ZFExtension: ~
+				Behat\MinkExtension:
+					default_session: 'zend'
+					sessions:
+						zend:
+							zend: ~
+		...
+					</code></pre>
+				</section>
+				<section>
+					<h1>No more webserver</h1>
+					<center><i class="twa twa-5x twa-raised-hands"></i></center>
+				</section>
+				<section>
+					<h2>Extra features</h2>
+					<ul>
+						<li>Override services in container</li>
+						<li>Pass services to contexts</li>
+						<li>Support file upload</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Thank you <i class="twa twa-clap"></i></h1>
+					<p><i class="fab fa-github"></i> https://github.com/springernature/zf-behat-extension</p>
+					<p><i class="twa twa-star"></i>が欲しい</p>
+					<p>Emoji provided by <a href="http://twitter.github.io/twemoji/">Twemoji</a></p>
+					<p>Use <a href="https://fontawesome.com">Font Awesome</a></p>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				history: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+		$(document).ready(function() {
+	// turn unicode alternate text off
+	//emojione.unicodeAlt = false;
+	var input = $('.reveal').html();
+	var replaced = emojione.toImage(input);
+	var replaced = emojione.shortnameToUnicode(input);
+	$('.reveal').html(replaced);
+});
+
+		</script>
+	</body>
+</html>
